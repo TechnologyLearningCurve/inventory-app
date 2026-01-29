@@ -1,47 +1,55 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Inventory Management{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="app-container">
         {% if user.is_authenticated %}
-            {% include 'components/sidebar.html' %}
+        {% include 'components/sidebar.html' %}
         {% endif %}
 
         <main class="main-content">
             {% if user.is_authenticated %}
-                <header class="header">
+            <header class="header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="btn btn-icon mobile-only">
+                        <i data-lucide="menu"></i>
+                    </button>
                     <div class="header-title">
                         <h1>{{ page_title|default:"Dashboard" }}</h1>
                     </div>
-                    <div class="header-actions">
-                        <button class="btn">
-                            <i data-lucide="bell"></i>
-                        </button>
-                        <div class="user-menu">
-                            <!-- Could add user dropdown here -->
-                        </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn">
+                        <i data-lucide="bell"></i>
+                    </button>
+                    <div class="user-menu">
+                        <!-- Could add user dropdown here -->
                     </div>
-                </header>
+                </div>
+            </header>
             {% endif %}
 
             <div class="content-wrapper">
                 {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
                     </div>
+                    {% endfor %}
+                </div>
                 {% endif %}
 
                 {% block content %}{% endblock %}
@@ -51,7 +59,27 @@
 
     <script>
         lucide.createIcons();
+
+        // Mobile Sidebar Toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+        }
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
     </script>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

@@ -277,9 +277,41 @@
             transform: translateY(40px) perspective(1000px) rotateX(5deg);
         }
 
+        /* ... existing styles ... */
         .ui-inner {
             text-align: center;
             color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 100px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+                /* Fallback */
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+
+            .ui-showcase {
+                height: 300px;
+                background: rgba(20, 20, 20, 0.9);
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 3rem 5%;
+            }
         }
     </style>
 </head>
