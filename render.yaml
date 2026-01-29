@@ -3,7 +3,7 @@ services:
     name: inventory-app
     runtime: python
     buildCommand: ./build.sh
-    startCommand: gunicorn inventory_project.wsgi:application
+    startCommand: gunicorn -c gunicorn.conf.py inventory_project.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
