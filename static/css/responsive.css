@@ -53,6 +53,8 @@
         width: 280px;
         transition: left 0.3s ease-in-out;
         box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+        background-color: var(--bg-secondary);
+        /* Ensure background is set */
     }
 
     .sidebar.active {
