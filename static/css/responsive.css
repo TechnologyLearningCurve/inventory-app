@@ -1,4 +1,3 @@
-
 /* Responsive Design */
 
 .header-left {
@@ -64,7 +63,8 @@
         padding: 1rem;
     }
 
-    .grid-cols-4, .grid-cols-2 {
+    .grid-cols-4,
+    .grid-cols-2 {
         grid-template-columns: 1fr;
     }
 
@@ -75,17 +75,14 @@
     .table-container {
         overflow-x: auto;
     }
-    
+
     table {
-        min-width: 600px; /* Ensure table doesn't squash too much */
+        min-width: 600px;
+        /* Ensure table doesn't squash too much */
     }
 
     /* Landing Page Adjustments */
     .hero h1 {
         font-size: 3rem;
-    }
-    
-    .nav-links {
-        display: none; /* Hide nav links on mobile landing for now */
     }
 }
