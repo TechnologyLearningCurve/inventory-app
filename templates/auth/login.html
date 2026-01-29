@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - InventX{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-title">
+            <h2>Welcome Back</h2>
+            <p style="color: var(--text-secondary);">Sign in to your account</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">
+                    {{ field.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                Sign In
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Styling overrides for login page inputs since they might not use the custom widgets depending on auth form */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text-primary);
+        font-size: 1rem;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+</style>
+{% endblock %}

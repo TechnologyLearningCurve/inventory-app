@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid-cols-4" style="margin-bottom: 2rem;">
+    <div class="card stat-card">
+        <h3>Total Products</h3>
+        <div class="value">{{ total_products }}</div>
+    </div>
+    <div class="card stat-card">
+        <h3>Low Stock Alerts</h3>
+        <div class="value" style="color: {% if low_stock_count > 0 %}var(--danger){% else %}var(--success){% endif %}">
+            {{ low_stock_count }}
+        </div>
+    </div>
+    <div class="card stat-card">
+        <h3>Total Inventory Value</h3>
+        <div class="value">${{ total_value|floatformat:2 }}</div>
+    </div>
+    <!-- Placeholder for another stat -->
+    <div class="card stat-card">
+        <h3>Active Suppliers</h3>
+        <div class="value">{{ recent_movements|length }}</div> <!-- Just a placeholder metric for now -->
+    </div>
+</div>
+
+<div class="grid-cols-2">
+    <!-- Recent Activity -->
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Recent Stock Movements</h2>
+        <div class="table-container" style="border: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="background: transparent; padding-left: 0;">Product</th>
+                        <th style="background: transparent;">Type</th>
+                        <th style="background: transparent; text-align: right; padding-right: 0;">Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movement in recent_movements %}
+                    <tr>
+                        <td style="padding-left: 0;">{{ movement.product.name }}</td>
+                        <td>
+                            <span
+                                class="status-badge {% if movement.movement_type == 'IN' %}status-active{% else %}status-inactive{% endif %}">
+                                {{ movement.get_movement_type_display }}
+                            </span>
+                        </td>
+                        <td style="text-align: right; padding-right: 0;">
+                            {% if movement.movement_type == 'OUT' %}-{% else %}+{% endif %}{{ movement.quantity }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-secondary);">No recent movements
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Low Stock Warning -->
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Low Stock Alerts</h2>
+        <div class="table-container" style="border: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="background: transparent; padding-left: 0;">Product</th>
+                        <th style="background: transparent;">Current</th>
+                        <th style="background: transparent; text-align: right; padding-right: 0;">Min</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in low_stock_products %}
+                    <tr>
+                        <td style="padding-left: 0;">{{ product.name }}</td>
+                        <td style="color: var(--danger); font-weight: 600;">{{ product.quantity }}</td>
+                        <td style="text-align: right; padding-right: 0;">{{ product.reorder_level }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                            <i data-lucide="check-circle" style="color: var(--success); margin-bottom: 0.5rem;"></i>
+                            <div style="font-size: 0.9rem;">All stock levels healthy</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

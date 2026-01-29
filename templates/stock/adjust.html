@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2 style="margin-bottom: 2rem;">Adjust Stock</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="form-label">Product</label>
+            {{ form.product }}
+            {{ form.product.errors }}
+        </div>
+
+        <div class="grid-cols-2">
+            <div class="form-group">
+                <label class="form-label">Movement Type</label>
+                {{ form.movement_type }}
+                {{ form.movement_type.errors }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Quantity</label>
+                {{ form.quantity }}
+                {{ form.quantity.errors }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Reference / Reason</label>
+            {{ form.reference }}
+            {{ form.reference.errors }}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Notes</label>
+            {{ form.notes }}
+            {{ form.notes.errors }}
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+            <a href="{% url 'stock_movement_list' %}" class="btn"
+                style="background: var(--bg-primary); border: 1px solid var(--border);">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Adjustment</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

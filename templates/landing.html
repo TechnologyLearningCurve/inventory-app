@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventX | The Future of Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #121212;
+            --surface-highlight: #1E1E1E;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --primary: #3B82F6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --accent: #8B5CF6;
+            --accent-glow: rgba(139, 92, 246, 0.5);
+            --border: #2A2A2A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ambient Background */
+        .ambient-light {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+        }
+
+        .orb-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: var(--primary-glow);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: var(--accent-glow);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(50px, 50px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.05em;
+            background: linear-gradient(to right, white, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .btn-primary {
+            background: white;
+            color: black;
+            padding: 0.75rem 1.5rem;
+            border-radius: full;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 999px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 120px 5% 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: auto 0;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            /* GSAP will animate */
+            transform: translateY(20px);
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            opacity: 0;
+            /* GSAP */
+            transform: translateY(20px);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            /* GSAP */
+            transform: translateY(20px);
+        }
+
+        /* Feature Cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            /* GSAP */
+            transform: translateY(20px);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--surface-highlight), var(--surface));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Abstract Dashboard UI Element */
+        .ui-showcase {
+            width: 100%;
+            max-width: 1000px;
+            height: 600px;
+            /* Placeholder height */
+            margin-top: 5rem;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(40px) perspective(1000px) rotateX(10deg);
+            /* 3D effect */
+            transition: transform 0.5s;
+        }
+
+        .ui-showcase:hover {
+            transform: translateY(40px) perspective(1000px) rotateX(5deg);
+        }
+
+        .ui-inner {
+            text-align: center;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <i data-lucide="box" style="width: 24px; height: 24px;"></i> InventX
+        </div>
+        <div class="nav-links">
+            <!-- <a href="#" class="nav-link">Features</a> -->
+            <!-- <a href="#" class="nav-link">Solutions</a> -->
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn-primary">Dashboard</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn-primary">Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Inventory Control.<br>Perfected.</h1>
+            <p>Experience the next generation of inventory management. Real-time tracking, predictive analytics, and a
+                design that feels like the future.</p>
+
+            <div class="cta-group">
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn-primary" style="padding: 1rem 2rem; font-size: 1rem;">Go to
+                    Dashboard</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn-primary" style="padding: 1rem 2rem; font-size: 1rem;">Get
+                    Started</a>
+                {% endif %}
+            </div>
+
+            <div class="ui-showcase">
+                <div class="ui-inner">
+                    <i data-lucide="bar-chart-2"
+                        style="width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <h3 style="color: white; font-weight: 500;">Interactive Dashboard Preview</h3>
+                    <p>Visualize your data with precision.</p>
+                </div>
+                <!-- We could put an image here if we had one -->
+            </div>
+        </div>
+    </section>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon"><i data-lucide="zap"></i></div>
+            <h3>Real-time Sync</h3>
+            <p>Updates happen instantly across all devices. Never lose track of a single item.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i data-lucide="shield"></i></div>
+            <h3>Enterprise Security</h3>
+            <p>Your data is protected by industry-leading encryption and access controls.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i data-lucide="trending-up"></i></div>
+            <h3>Predictive Analytics</h3>
+            <p>AI-driven insights help you forecast demand and optimize stock levels.</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // GSAP Animations
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin();
+
+            const tl = gsap.timeline();
+
+            tl.to('.hero h1', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+                .to('.hero p', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.8')
+                .to('.cta-group', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.8')
+                .to('.ui-showcase', { opacity: 1, transform: 'translateY(0) perspective(1000px) rotateX(10deg)', duration: 1.2, ease: 'power3.out' }, '-=0.6')
+                .to('.feature-card', { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' }, '-=0.8');
+        });
+    </script>
+</body>
+
+</html>

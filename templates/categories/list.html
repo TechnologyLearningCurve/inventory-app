@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Categories</h2>
+        <a href="{% url 'category_create' %}" class="btn btn-primary">
+            <i data-lucide="plus"></i> Add Category
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Products Count</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td style="font-weight: 500;">{{ category.name }}</td>
+                    <td style="color: var(--text-secondary);">{{ category.description|truncatechars:50 }}</td>
+                    <td>{{ category.product_count }}</td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'category_edit' pk=category.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--accent);">
+                            <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                        <a href="{% url 'category_delete' pk=category.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--danger);">
+                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        No categories found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

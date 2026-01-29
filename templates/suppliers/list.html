@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2>Suppliers</h2>
+        <a href="{% url 'supplier_create' %}" class="btn btn-primary">
+            <i data-lucide="plus"></i> Add Supplier
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers %}
+                <tr>
+                    <td style="font-weight: 500;">{{ supplier.name }}</td>
+                    <td>{{ supplier.email }}</td>
+                    <td>{{ supplier.phone }}</td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'supplier_edit' pk=supplier.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--accent);">
+                            <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                        <a href="{% url 'supplier_delete' pk=supplier.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--danger);">
+                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        No suppliers found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

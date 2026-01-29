@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto; text-align: center; padding: 3rem;">
+    <div
+        style="width: 64px; height: 64px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+        <i data-lucide="alert-triangle" style="width: 32px; height: 32px;"></i>
+    </div>
+
+    <h2 style="margin-bottom: 1rem;">Delete Product?</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+        Are you sure you want to delete <strong>{{ obj.name }}</strong>? This action cannot be undone.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+            <a href="{% url 'product_list' %}" class="btn"
+                style="background: var(--bg-primary); border: 1px solid var(--border);">Cancel</a>
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div class="search-box" style="display: flex; gap: 1rem;">
+            <form method="get" style="display: flex; gap: 0.5rem;">
+                <input type="text" name="q" placeholder="Search products..." value="{{ request.GET.q }}"
+                    class="form-input" style="width: 300px;">
+                <select name="category" class="form-input" style="width: 200px;">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                {% if request.GET.q or request.GET.category %}
+                <a href="{% url 'product_list' %}" class="btn"
+                    style="background: var(--bg-primary); border: 1px solid var(--border);">Reset</a>
+                {% endif %}
+            </form>
+        </div>
+        <a href="{% url 'product_create' %}" class="btn btn-primary">
+            <i data-lucide="plus"></i> Add Product
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td style="font-family: monospace; color: var(--text-secondary);">{{ product.sku }}</td>
+                    <td style="font-weight: 500;">{{ product.name }}</td>
+                    <td>{{ product.category.name|default:"-" }}</td>
+                    <td>${{ product.unit_price }}</td>
+                    <td>
+                        <span
+                            style="{% if product.quantity <= product.reorder_level %}color: var(--danger); font-weight: bold;{% endif %}">
+                            {{ product.quantity }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if product.is_active %}
+                        <span class="status-badge status-active">Active</span>
+                        {% else %}
+                        <span class="status-badge status-inactive">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'product_edit' pk=product.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--accent);">
+                            <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                        <a href="{% url 'product_delete' pk=product.pk %}" class="btn"
+                            style="padding: 0.25rem 0.5rem; color: var(--danger);">
+                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        No products found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

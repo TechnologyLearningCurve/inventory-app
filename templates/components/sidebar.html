@@ -1,0 +1,41 @@
+<aside class="sidebar">
+    <div class="logo">
+        <i data-lucide="box" color="var(--accent)"></i>
+        <div>Invent<span>X</span></div>
+    </div>
+
+    <nav class="nav-links">
+        <a href="{% url 'dashboard' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+        </a>
+        <a href="{% url 'product_list' %}"
+            class="nav-item {% if 'product' in request.resolver_match.url_name %}active{% endif %}">
+            <i data-lucide="package"></i>
+            Products
+        </a>
+        <a href="{% url 'category_list' %}"
+            class="nav-item {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+            <i data-lucide="tags"></i>
+            Categories
+        </a>
+        <a href="{% url 'stock_movement_list' %}"
+            class="nav-item {% if 'stock' in request.resolver_match.url_name %}active{% endif %}">
+            <i data-lucide="arrow-left-right"></i>
+            Stock
+        </a>
+        <a href="{% url 'supplier_list' %}"
+            class="nav-item {% if 'supplier' in request.resolver_match.url_name %}active{% endif %}">
+            <i data-lucide="truck"></i>
+            Suppliers
+        </a>
+    </nav>
+
+    <div class="user-profile">
+        <a href="{% url 'logout' %}" class="nav-item" style="width: 100%;">
+            <i data-lucide="log-out"></i>
+            Logout
+        </a>
+    </div>
+</aside>
