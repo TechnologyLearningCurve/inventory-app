@@ -24,8 +24,9 @@
             <tbody>
                 {% for movement in movements %}
                 <tr>
-                    <td style="color: var(--text-secondary); font-size: 0.9em;">{{ movement.created_at|date:"M d, Y H:i"
-                        }}</td>
+                    <td style="color: var(--text-secondary); font-size: 0.9em;">
+                        {{ movement.created_at|date:"M d, Y H:i" }}
+                    </td>
                     <td style="font-weight: 500;">{{ movement.product.name }}</td>
                     <td>
                         <span
